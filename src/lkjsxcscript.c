@@ -5,12 +5,13 @@
 #include <unistd.h>
 
 static struct termios term_old;
-static struct termios term_new;
 
 void term_deinit() {
     tcsetattr(STDIN_FILENO, TCSAFLUSH, &term_old);
 }
+
 void term_init() {
+    static struct termios term_new;
     tcgetattr(STDIN_FILENO, &term_old);
     term_new = term_old;
     term_new.c_iflag &= ~(BRKINT | ICRNL | INPCK | ISTRIP | IXON);
