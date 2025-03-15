@@ -7,6 +7,9 @@
 struct termios term_old;
 struct termios term_new;
 
+void term_deinit() {
+    tcsetattr(STDIN_FILENO, TCSAFLUSH, &term_old);
+}
 void term_init() {
     tcgetattr(STDIN_FILENO, &term_old);
     term_new = term_old;
@@ -23,13 +26,14 @@ int main() {
     term_init();
     while (1) {
         char c;
-        if (read(0, &c, 1) == 1) {
-            if (c == 0x1b) {
-                break;
-            }
-            printf("%c", c);
+        if (read(0, &c, 1) == 0) {
+            continue;
         }
+        if (c == 0x1b) {
+            break;
+        }
+        write(STDOUT_FILENO, &c, 1);
     }
-    tcsetattr(STDIN_FILENO, TCSAFLUSH, &term_old);
+    term_deinit();
     return 0;
 }
