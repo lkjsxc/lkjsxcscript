@@ -4,8 +4,8 @@
 #include <termios.h>
 #include <unistd.h>
 
-struct termios term_old;
-struct termios term_new;
+static struct termios term_old;
+static struct termios term_new;
 
 void term_deinit() {
     tcsetattr(STDIN_FILENO, TCSAFLUSH, &term_old);
