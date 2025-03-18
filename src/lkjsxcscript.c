@@ -23,6 +23,30 @@ void term_init() {
     tcsetattr(STDIN_FILENO, TCSAFLUSH, &term_new);
 }
 
+void compoile_deinit() {
+}
+
+void compile_init() {
+}
+
+void compile_tokenize() {
+}
+
+void compile_parse() {
+}
+
+void compile_analyze() {
+}
+
+void compile_optimize() {
+}
+
+void compile_generate() {
+}
+
+void compile() {
+}
+
 int main() {
     term_init();
     while (1) {
