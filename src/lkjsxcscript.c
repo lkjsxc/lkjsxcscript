@@ -4,16 +4,16 @@
 #include <termios.h>
 #include <unistd.h>
 
-static struct termios term_old;
+static struct termios term_orig;
 
 void term_deinit() {
-    tcsetattr(STDIN_FILENO, TCSAFLUSH, &term_old);
+    tcsetattr(STDIN_FILENO, TCSAFLUSH, &term_orig);
 }
 
 void term_init() {
     static struct termios term_new;
-    tcgetattr(STDIN_FILENO, &term_old);
-    term_new = term_old;
+    tcgetattr(STDIN_FILENO, &term_orig);
+    term_new = term_orig;
     term_new.c_iflag &= ~(BRKINT | ICRNL | INPCK | ISTRIP | IXON);
     term_new.c_oflag &= ~(OPOST);
     term_new.c_cflag |= (CS8);
