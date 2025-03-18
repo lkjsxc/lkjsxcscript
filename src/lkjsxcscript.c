@@ -23,42 +23,39 @@ void term_init() {
     tcsetattr(STDIN_FILENO, TCSAFLUSH, &term_new);
 }
 
-void compoile_deinit() {
+void vm_compile_tokenize() {
 }
 
-void compile_init() {
+void vm_compile_parse() {
 }
 
-void compile_tokenize() {
+void vm_compile_analyze() {
 }
 
-void compile_parse() {
+void vm_compile_optimize() {
 }
 
-void compile_analyze() {
+void vm_compile_generate() {
 }
 
-void compile_optimize() {
+void vm_compile() {
 }
 
-void compile_generate() {
+void vm_execute() {
 }
 
-void compile() {
+void vm_deinit() {
+}
+
+void vm_init() {
 }
 
 int main() {
     term_init();
-    while (1) {
-        char c;
-        if (read(0, &c, 1) == 0) {
-            continue;
-        }
-        if (c == 0x1b) {
-            break;
-        }
-        write(STDOUT_FILENO, &c, 1);
-    }
+    vm_init();
+    vm_compile();
+    vm_execute();
+    vm_deinit();
     term_deinit();
     return 0;
 }
