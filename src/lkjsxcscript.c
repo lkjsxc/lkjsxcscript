@@ -50,12 +50,24 @@ void vm_deinit() {
 void vm_init() {
 }
 
-int main() {
-    term_init();
-    vm_init();
-    vm_compile();
-    vm_execute();
+void deinit() {
     vm_deinit();
     term_deinit();
+}
+
+void init() {
+    term_init();
+    vm_init();
+}
+
+void run() {
+    vm_compile();
+    vm_execute();
+}
+
+int main() {
+    init();
+    run();
+    deinit();
     return 0;
 }
