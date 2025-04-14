@@ -84,7 +84,7 @@ enum result compile_readsrc(char* path) {
     size_t bytes_read = fread(mem.compiler.src, 1, sizeof(mem.compiler.src), file);
     fclose(file);
     mem.compiler.src[bytes_read] = '\n';
-    mem.compiler.src[bytes_read+1] = '\0';
+    mem.compiler.src[bytes_read + 1] = '\0';
     return RESULT_OK;
 }
 
@@ -98,6 +98,17 @@ enum result compile_tokenize() {
                 *(token_end++) = (struct vec){.data = base, .size = itr - base};
             }
             base = itr + 1;
+            continue;
+        }
+        if ((*itr == '=' && *(itr + 1) == '=') || (*itr == '!' && *(itr + 1) == '=') ||
+            (*itr == '<' && *(itr + 1) == '=') || (*itr == '>' && *(itr + 1) == '=') ||
+            (*itr == '&' && *(itr + 1) == '&') || (*itr == '|' && *(itr + 1) == '|')) {
+            if (base != itr) {
+                *(token_end++) = (struct vec){.data = base, .size = itr - base};
+            }
+            *(token_end++) = (struct vec){.data = itr, .size = 2};
+            base = itr + 2;
+            itr += 1;
             continue;
         }
         if (*itr == '+' || *itr == '-' || *itr == '*' || *itr == '/' || *itr == '%' ||
@@ -161,7 +172,6 @@ enum result execute() {
 }
 
 int main(int argc, char** argv) {
-
 #if ISDEBUG
     if (compile("./lkjsxcscript_src") == RESULT_ERR) {
         fprintf(stderr, "Compilation failed\n");
