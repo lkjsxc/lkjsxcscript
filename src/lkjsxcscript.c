@@ -66,6 +66,8 @@ struct compiler {
     struct node node[MEMORY_SIZE / 32];
     struct node map_key[MEMORY_SIZE / 32];
     struct node map_value[MEMORY_SIZE / 32];
+    int node_size;
+    int map_size;
 };
 
 union mem {
@@ -126,6 +128,20 @@ enum result compile_tokenize() {
         }
     }
     *token_end = (struct vec){.data = NULL, .size = 0};
+}
+
+enum result compile_pushnode(struct node* dst, struct vec* token) {
+    if (mem.compiler.node_size >= sizeof(mem.compiler.node) / sizeof(struct node)) {
+        fprintf(stderr, "Error: node size exceeded\n");
+        return RESULT_ERR;
+    }
+    struct node* node = &mem.compiler.node[mem.compiler.node_size++];
+    node->token = token;
+    node->next = dst;
+    node->lhs = NULL;
+    node->rhs = NULL;
+    dst = node;
+    return RESULT_OK;
 }
 
 enum result compile_parse() {
