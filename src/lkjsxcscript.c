@@ -13,6 +13,10 @@ enum result {
     RESULT_OK,
     RESULT_ERR,
 };
+enum bool {
+    FALSE,
+    TRUE,
+};
 
 enum type {
     INST_NULL,
@@ -141,6 +145,33 @@ enum result compile_pushnode(struct node* dst, struct vec* token) {
     node->lhs = NULL;
     node->rhs = NULL;
     dst = node;
+    return RESULT_OK;
+}
+
+enum bool token_eq(struct vec* token, struct vec* str) {
+    if (token->size != str->size) {
+        return FALSE;
+    }
+    return memcmp(token->data, str->data, token->size) == 0;
+}
+
+enum bool token_eq_str(struct vec* token, char* str) {
+    size_t len = strlen(str);
+    if (token->size != len) {
+        return FALSE;
+    }
+    return memcmp(token->data, str, len) == 0;
+}
+
+enum result token_to_int(struct vec* token, int64_t* dst) {
+    int64_t value = 0;
+    for(size_t i = 0; i < token->size; i++) {
+        if (token->data[i] < '0' || token->data[i] > '9') {
+            return RESULT_ERR;
+        }
+        value = value * 10 + (token->data[i] - '0');
+    }
+    *dst = value;
     return RESULT_OK;
 }
 
